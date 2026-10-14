@@ -1,0 +1,47 @@
+<!doctype html>
+<!-- Opens the real extension popup outside Chrome's extension system (used for README screenshots).
+     chrome.storage is replaced by an in-memory stand-in. -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CourseWeb Filter: popup preview</title>
+    <link rel="stylesheet" href="../extension/popup.css" />
+    <style>
+      html { background: #e9ecef; }
+      body { margin: 24px auto; background: #fff; border-radius: 8px; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18); }
+    </style>
+    <script>
+      let store = {};
+      window.chrome = {
+        storage: {
+          sync: {
+            get: (key, cb) => cb({ [key]: store[key] }),
+            set: (obj, cb) => { Object.assign(store, obj); cb && cb(); },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Pull in the popup's markup (everything inside <body>, minus its <script> tags).
+      fetch('../extension/popup.html')
+        .then((r) => r.text())
+        .catch(() => null)
+        .then((html) => {
+          if (html) {
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            doc.querySelectorAll('script').forEach((s) => s.remove());
+            document.getElementById('root').outerHTML = doc.body.innerHTML;
+          }
+          for (const src of ['../extension/filter.js', '../extension/popup.js']) {
+            const s = document.createElement('script');
+            s.src = src;
+            s.async = false;
+            document.body.appendChild(s);
+          }
+        });
+    </script>
+  </body>
+</html>
