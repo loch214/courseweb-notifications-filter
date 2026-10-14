@@ -60,8 +60,24 @@ Setting your group, using `Y3.S1.WE.SE.0101` as an example:
 | Campus | Malabe | your campus |
 | Batch | Weekend (WE) | `WE` = weekend, `WD` = weekday |
 | Year / Semester | 3 / 1 | `Y3.S1` |
-| Specialisation | SE | `SE`, `IT`, `AI`, `DS`, `CS`, `CSNE`… |
+| Specialisation | SE – Software Engineering | pick from the dropdown (see below) |
 | Group . Sub-group | 1 . 1 | `0101` = group 01, sub-group 01 |
+
+The specialisation dropdown lists every code found in real CourseWeb group codes:
+
+| Code | Specialisation |
+| --- | --- |
+| `IT` | Information Technology (also used for Year 1–2 groups before specialising) |
+| `SE` | Software Engineering |
+| `AI` | Artificial Intelligence |
+| `DS` | Data Science |
+| `CS` | Cyber Security |
+| `CSNE` | Computer Systems & Network Engineering |
+| `ISE` | Information Systems Engineering |
+| `IM` | Interactive Media |
+
+If SLIIT adds a new one, choose **Other…** and type the code exactly as it appears in your group code
+(e.g. `CYS` for `Y3.S1.WE.CYS.0101`).
 
 Each new semester, just update Year / Semester / Group.
 

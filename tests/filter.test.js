@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert');
-const { classify, findGroupCodes, describeProfile } = require('../extension/filter.js');
+const { classify, findGroupCodes, describeProfile, SPECIALIZATIONS } = require('../extension/filter.js');
 const fixtures = require('./fixtures.js');
 
 for (const [title, expected] of fixtures) {
@@ -30,6 +30,26 @@ test('a different profile flips the verdicts', () => {
   assert.strictEqual(classify('MEM Re-Evaluation Schedule - Weekday', weekdayAI).relevant, true);
   assert.strictEqual(classify('IT3120 Presentation Schedule - Weekend', weekdayAI).relevant, false);
   assert.strictEqual(classify('lab sheet 07 submission - Kandy Uni', { campus: 'Kandy' }).relevant, true);
+});
+
+test('every dropdown specialisation actually filters', () => {
+  for (const { code } of SPECIALIZATIONS) {
+    const me = { specialization: code };
+    assert.strictEqual(classify('Lab 11 Submission – Malabe – Y3.S1.WE.' + code + '.0101', me).relevant, true, code + ' own lab');
+    assert.strictEqual(classify('WEEKLY QUIZ 11 - Y3.S1.WE.' + code + '.01', me).relevant, true, code + ' own quiz');
+    for (const other of SPECIALIZATIONS.filter((s) => s.code !== code)) {
+      assert.strictEqual(classify('Lab 11 Submission – Malabe – Y3.S1.WE.' + other.code + '.0101', me).relevant, false, code + ' vs ' + other.code);
+    }
+  }
+});
+
+test('specialisation is case/space-insensitive in settings', () => {
+  assert.strictEqual(classify('Lab 11 Submission – Malabe – Y3.S1.WE.CSNE.0101', { specialization: ' csne ' }).relevant, true);
+});
+
+test('CS and CSNE are not confused', () => {
+  assert.strictEqual(classify('WEEKLY QUIZ 11 - Y3.S1.WE.CSNE.01', { specialization: 'CS' }).relevant, false);
+  assert.strictEqual(classify('WEEKLY QUIZ 11 - Y3.S1.WE.CS.01', { specialization: 'CSNE' }).relevant, false);
 });
 
 test('pro-rata toggle', () => {

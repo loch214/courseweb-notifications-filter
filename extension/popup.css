@@ -55,6 +55,14 @@ select {
   color: #1d2125;
 }
 
+.grid .wide {
+  grid-column: 1 / -1;
+}
+
+#specializationOther {
+  margin-top: 4px;
+}
+
 .pair {
   display: flex;
   align-items: center;

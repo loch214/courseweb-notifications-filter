@@ -23,6 +23,19 @@
     hideAbsent: true,
   };
 
+  // Specialisation codes as they appear in CourseWeb group codes (e.g. Y3.S1.WE.SE.0101).
+  // Collected from real CourseWeb module pages and notifications (Oct 2026).
+  const SPECIALIZATIONS = [
+    { code: 'IT', name: 'Information Technology' },
+    { code: 'SE', name: 'Software Engineering' },
+    { code: 'AI', name: 'Artificial Intelligence' },
+    { code: 'DS', name: 'Data Science' },
+    { code: 'CS', name: 'Cyber Security' },
+    { code: 'CSNE', name: 'Computer Systems & Network Engineering' },
+    { code: 'ISE', name: 'Information Systems Engineering' },
+    { code: 'IM', name: 'Interactive Media' },
+  ];
+
   // SLIIT campuses other than the one in the profile are treated as "not mine".
   const CAMPUSES = ['Malabe', 'Kandy', 'Northern', 'Matara', 'Kurunegala', 'Jaffna', 'Metro'];
 
@@ -54,7 +67,11 @@
   const YEAR_SEM = [/\bY\s?([1-4])\s?\.?\s?S\s?([12])\b/gi, /\bYear\s*([1-4])\s*,?\s*Sem(?:ester)?\s*([12])\b/gi];
 
   function withDefaults(profile) {
-    return Object.assign({}, DEFAULT_PROFILE, profile || {});
+    const p = Object.assign({}, DEFAULT_PROFILE, profile || {});
+    // Group codes are upper-case ("SE"), so " se " must still match.
+    p.specialization = String(p.specialization || '').trim().toUpperCase();
+    p.mode = String(p.mode || '').trim().toUpperCase();
+    return p;
   }
 
   function findGroupCodes(text) {
@@ -152,7 +169,7 @@
     return 'Y' + p.year + '.S' + p.semester + '.' + p.mode + '.' + p.specialization + '.' + pad(p.group) + pad(p.subgroup) + ' (' + p.campus + ')';
   }
 
-  const api = { DEFAULT_PROFILE, classify, findGroupCodes, describeProfile, withDefaults };
+  const api = { DEFAULT_PROFILE, SPECIALIZATIONS, classify, findGroupCodes, describeProfile, withDefaults };
   root.CWFilter = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof self !== 'undefined' ? self : globalThis);
