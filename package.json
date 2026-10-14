@@ -1,0 +1,10 @@
+{
+  "name": "courseweb-notifications-filter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Show only the SLIIT CourseWeb notifications meant for your group (Chrome extension + Outlook rules).",
+  "scripts": {
+    "test": "node --test tests/filter.test.js && node scripts/outlook-rules.js",
+    "rules": "node scripts/outlook-rules.js --print"
+  }
+}

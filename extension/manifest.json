@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "CourseWeb Filter (SLIIT)",
+  "version": "1.0.0",
+  "description": "Shows only the CourseWeb notifications, deadlines and activities meant for your group.",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://courseweb.sliit.lk/*"],
+      "js": ["filter.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "CourseWeb Filter",
+    "default_popup": "popup.html",
+    "default_icon": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png", "128": "icons/128.png" }
+  },
+  "icons": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png", "128": "icons/128.png" }
+}

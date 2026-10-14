@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CourseWeb Filter</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>CourseWeb Filter</h1>
+      <label class="switch"><input type="checkbox" id="enabled" /> On</label>
+    </header>
+
+    <p class="summary">Showing only items for <strong id="summary"></strong></p>
+
+    <fieldset>
+      <legend>Your group</legend>
+      <div class="grid">
+        <label>Campus
+          <select id="campus">
+            <option>Malabe</option>
+            <option>Kandy</option>
+            <option>Northern</option>
+            <option>Matara</option>
+            <option>Kurunegala</option>
+            <option>Jaffna</option>
+            <option>Metro</option>
+          </select>
+        </label>
+        <label>Batch
+          <select id="mode">
+            <option value="WE">Weekend (WE)</option>
+            <option value="WD">Weekday (WD)</option>
+          </select>
+        </label>
+        <label>Year <input id="year" type="number" min="1" max="4" /></label>
+        <label>Semester <input id="semester" type="number" min="1" max="2" /></label>
+        <label>Specialisation <input id="specialization" type="text" maxlength="5" placeholder="SE" /></label>
+        <label>Group . Sub-group
+          <span class="pair"><input id="group" type="number" min="1" max="99" />.<input id="subgroup" type="number" min="1" max="99" /></span>
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Also hide</legend>
+      <label class="check"><input type="checkbox" id="hideProrata" /> Pro-rata items</label>
+      <label class="check"><input type="checkbox" id="hideRepeat" /> Repeat-student items</label>
+      <label class="check"><input type="checkbox" id="hideAbsent" /> "Absent" submissions (for students who missed an event)</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Display</legend>
+      <label class="check"><input type="radio" name="display" value="hide" /> Hide other groups' notifications</label>
+      <label class="check"><input type="radio" name="display" value="dim" /> Just grey them out</label>
+      <label class="check"><input type="checkbox" id="dimCoursePage" /> Grey out other groups' activities on module pages</label>
+      <label class="check"><input type="checkbox" id="fixBadge" /> Bell count shows only my unread notifications</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Try a title</legend>
+      <input id="probe" type="text" placeholder="Paste a notification title…" />
+      <div id="verdict"></div>
+    </fieldset>
+
+    <footer id="saved">Changes apply instantly.</footer>
+    <script src="filter.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

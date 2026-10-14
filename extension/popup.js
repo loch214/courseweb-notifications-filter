@@ -1,0 +1,71 @@
+(() => {
+  'use strict';
+  const F = self.CWFilter;
+  const $ = (id) => document.getElementById(id);
+
+  const PROFILE_FIELDS = ['campus', 'mode', 'year', 'semester', 'specialization', 'group', 'subgroup'];
+  const PROFILE_FLAGS = ['hideProrata', 'hideRepeat', 'hideAbsent'];
+  const NUMERIC = ['year', 'semester', 'group', 'subgroup'];
+
+  let settings;
+
+  function render() {
+    const p = settings.profile;
+    $('enabled').checked = settings.enabled;
+    for (const f of PROFILE_FIELDS) $(f).value = p[f];
+    for (const f of PROFILE_FLAGS) $(f).checked = p[f];
+    document.querySelector('input[name="display"][value="' + settings.display + '"]').checked = true;
+    $('dimCoursePage').checked = settings.dimCoursePage;
+    $('fixBadge').checked = settings.fixBadge;
+    $('summary').textContent = F.describeProfile(p);
+    probe();
+  }
+
+  function readForm() {
+    const p = {};
+    for (const f of PROFILE_FIELDS) p[f] = NUMERIC.includes(f) ? Number($(f).value) || 1 : $(f).value.trim();
+    p.specialization = p.specialization.toUpperCase();
+    for (const f of PROFILE_FLAGS) p[f] = $(f).checked;
+    return {
+      enabled: $('enabled').checked,
+      profile: F.withDefaults(p),
+      display: document.querySelector('input[name="display"]:checked').value,
+      dimCoursePage: $('dimCoursePage').checked,
+      fixBadge: $('fixBadge').checked,
+    };
+  }
+
+  function save() {
+    settings = readForm();
+    chrome.storage.sync.set({ settings }, () => {
+      $('summary').textContent = F.describeProfile(settings.profile);
+      $('saved').textContent = 'Saved.';
+      probe();
+    });
+  }
+
+  function probe() {
+    const text = $('probe').value.trim();
+    const out = $('verdict');
+    if (!text) {
+      out.textContent = '';
+      out.className = '';
+      return;
+    }
+    const r = F.classify(text, settings.profile);
+    out.textContent = (r.relevant ? 'Shown: ' : 'Hidden: ') + r.reason;
+    out.className = r.relevant ? 'mine' : 'other';
+  }
+
+  chrome.storage.sync.get('settings', (data) => {
+    const s = (data && data.settings) || {};
+    settings = Object.assign(
+      { enabled: true, display: 'hide', dimCoursePage: true, fixBadge: true },
+      s,
+      { profile: F.withDefaults(s.profile) },
+    );
+    render();
+    document.querySelectorAll('input:not(#probe), select').forEach((el) => el.addEventListener('change', save));
+    $('probe').addEventListener('input', probe);
+  });
+})();
